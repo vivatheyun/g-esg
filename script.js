@@ -142,18 +142,20 @@ function executeAnalysis() {
         return;
     }
 
-    // 페이지 수 결정
-    const finalPageCount = document.getElementById('page-count-input').value;
-
+    // 페이지 수 읽기
+    const finalPageCount = parseInt(document.getElementById('page-count-input').value) || 3;
     const screen = document.getElementById('output-screen');
-    screen.innerHTML = `<div class='terminal-placeholder'>> 작성된 목차 기반으로 총 ${finalPageCount}페이지 분량의 심층 리포트를 생성 중입니다...</div>`;
+    
+    screen.innerHTML = `<div class='terminal-placeholder'>> 총 ${finalPageCount}페이지 분량의 초정밀 ESG 리포트를 생성 중입니다...</div>`;
     
     setTimeout(() => {
-        let resultHtml = `<h1 style='color:#00f2ff; margin-bottom:20px;'>G-ESG 분석 리포트: ${document.getElementById('project-title').innerText}</h1>`;
+        let resultHtml = `<h1 style='color:#00f2ff; margin-bottom:20px; border-bottom:2px solid var(--primary); padding-bottom:10px;'>G-ESG 종합 분석 리포트 (총 ${finalPageCount}p)</h1>`;
         
-        tocLines.forEach((line) => {
+        // 각 목차당 할당될 대략적인 페이지 분량
+        const pagesPerSection = (finalPageCount / tocLines.length).toFixed(1);
+
+        tocLines.forEach((line, index) => {
             const trimmed = line.trim();
-            // 계층 판별: 점(.)의 개수를 기준으로 깊이 측정
             const dotCount = (trimmed.split(' ')[0].match(/\./g) || []).length;
             const depth = trimmed.match(/^\d+(\.\d+)+/) ? dotCount : 0;
             const indent = depth * 25; 
@@ -161,15 +163,39 @@ function executeAnalysis() {
             const fontSize = 18 - (depth * 2);
             const fontWeight = depth === 0 ? '700' : '500';
             const color = depth === 0 ? 'var(--primary)' : 'rgba(255,255,255,0.8)';
-            const border = depth === 0 ? `border-left:4px solid var(--primary);` : '';
+            
+            resultHtml += `<div style='margin-left:${indent}px; margin-top:30px;'>`;
+            resultHtml += `<h2 style='font-size:${fontSize}px; font-weight:${fontWeight}; color:${color}; margin-bottom:12px;'>${trimmed}</h2>`;
+            
+            // 페이지 수에 비례하여 내용 풍부하게 생성 (분량 시뮬레이션 강화)
+            const repeatCount = Math.max(1, Math.floor(pagesPerSection * 3)); 
+            for(let r=0; r < repeatCount; r++) {
+                resultHtml += `<p style='color:rgba(255,255,255,0.7); font-size:13px; line-height:1.9; margin-bottom:15px; text-align:justify;'>
+                    <b>[심층 분석 데이터 ${r+1}]</b> 해당 섹션 '${trimmed}'에 대해 수집된 과거 리포트의 정성적 데이터와 현재 가용 가능한 정량적 수치 지표를 교차 검증한 결과입니다. 
+                    글로벌 ESG 공시 표준(GRI, SASB 등)을 기준으로 분석했을 때, 현재의 데이터 트렌드는 과거 대비 약 15% 이상의 개선세를 보이고 있으며, 
+                    이는 단순히 수치적 향상을 넘어 조직 내 지속 가능한 경영 철학이 실무 단위까지 깊게 내재화되었음을 시사합니다. 
+                    특히 이번 분기에서 관찰된 특이점은 공급망 전반에 걸친 탄소 배출량 관리의 정밀도가 대폭 향상되었다는 점이며, 
+                    이를 위해 도입된 AI 기반 모니터링 시스템은 실시간 데이터 수집과 오차 범위 0.5% 이내의 정밀 분석을 가능케 하였습니다. 
+                    이러한 정밀도는 향후 발생 가능한 잠재적 환경 리스크를 선제적으로 방어하는 핵심 자산이 될 것입니다.
+                </p>`;
+                
+                resultHtml += `<p style='color:rgba(255,255,255,0.6); font-size:13px; line-height:1.9; margin-bottom:15px; text-align:justify; padding-left:10px; border-left:2px solid rgba(0, 242, 255, 0.2);'>
+                    추가적으로, 본 항목과 연계된 사회적 책임(S) 및 지배구조(G) 지표와의 상관관계 분석 결과, 투명한 정보 공시가 이해관계자 신뢰도 향상에 결정적인 
+                    영향을 미치고 있음이 확인되었습니다. 전략적 로드맵 관점에서 볼 때, 현재의 수치 자료는 차년도 목표 달성률을 120% 상회할 것으로 예측되며, 
+                    이는 경쟁사 대비 독보적인 ESG 경쟁력을 확보하는 근거가 됩니다. 따라서 본 리포트에서는 이러한 성과를 기반으로 한 글로벌 이니셔티브 참여 및 
+                    지속 가능 경영 보고서의 고도화 방향성을 다음과 같이 제안합니다.
+                </p>`;
 
-            resultHtml += `<div style='margin-left:${indent}px; margin-top:20px; padding-left:${depth === 0 ? '10px' : '0'}; ${border}'>`;
-            resultHtml += `<h2 style='font-size:${fontSize}px; font-weight:${fontWeight}; color:${color}; margin-bottom:8px;'>${trimmed}</h2>`;
-            resultHtml += `<p style='color:rgba(255,255,255,0.6); font-size:13px; line-height:1.6;'>해당 계층 ${trimmed}에 대한 상세 분석 내용입니다. 총 ${finalPageCount}페이지 분량의 목표치에 맞춰 최적화된 데이터를 추출하여 보고서를 구성했습니다.</p>`;
+                if (r < repeatCount - 1) {
+                    resultHtml += `<div style='height:1px; background:linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent); margin:20px 0;'></div>`;
+                }
+            }
             resultHtml += `</div>`;
         });
         
         screen.innerHTML = resultHtml;
+        // 스크롤을 맨 위로
+        screen.scrollTop = 0;
     }, 1500);
 }
 
