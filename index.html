@@ -1,32 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-    <title>간단한 지도 표시하기(내클라이언트ID)</title>
-    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=4gr80o1ge3"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-ESG | Access Control</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div id="map" style="width:100%;height:800px;"></div>
+    <!-- 로그인 영역 -->
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2>G-ESG LOGIN</h2>
+            <div class="input-group">
+                <label>USER NAME</label>
+                <input type="text" id="username" placeholder="이름을 입력하세요" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label>PASSWORD</label>
+                <input type="password" id="password" placeholder="암호를 입력하세요">
+            </div>
+            <button onclick="checkLogin()">UNLOCK SYSTEM</button>
+        </div>
+    </div>
 
-    <script>
-        var mapOptions = {
-            center: new naver.maps.LatLng(37.3595905, 127.105399),
-            zoom: 10
-        };
+    <!-- 메인 콘텐츠 영역 -->
+    <div id="main-content">
+        <h1 class="welcome-text">Hello , ESG !!!</h1>
+    </div>
 
-        var map = new naver.maps.Map('map', mapOptions);
-
-        window.navermap_authFailure = function () {
-            // 인증 실패 시 처리 코드 작성
-            // ...
-            alert('인증 실패');
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
