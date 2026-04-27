@@ -224,6 +224,17 @@ function saveAsDoc() {
     document.body.removeChild(link);
 }
 
+// 문서 출력 초기화
+function clearOutput() {
+    const screen = document.getElementById('output-screen');
+    if (screen.innerHTML.includes('terminal-placeholder')) return;
+    
+    if (confirm("작성된 문서 내용을 모두 삭제하고 초기화하시겠습니까?")) {
+        screen.innerHTML = `<div class="terminal-placeholder">실행 버튼을 누르면 분석이 시작됩니다...</div>`;
+        screen.scrollTop = 0;
+    }
+}
+
 // 키보드 이벤트 지원 (Enter 및 Shift + G)
 document.addEventListener('keydown', function (e) {
     const overlay = document.getElementById('login-overlay');

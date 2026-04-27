@@ -80,23 +80,20 @@
 
             <!-- Right: Output & Controls -->
             <section class="panel output-panel">
-                <div class="panel-header">
-                    <h3>🖥️ 출력 및 실행</h3>
+                <div class="panel-header header-toolbar">
+                    <h3>🖥️ 리포트 작성 및 출력</h3>
+                    <div class="toolbar-actions">
+                        <div class="page-control">
+                            <span class="control-label">Pages:</span>
+                            <input type="number" id="page-count-input" value="3" min="1" max="50">
+                        </div>
+                        <button class="btn-execute-mini btn-primary-glow" onclick="executeAnalysis()">문서 작성</button>
+                        <button class="btn-execute-mini" onclick="saveAsDoc()">.DOC 저장</button>
+                        <button class="btn-clear-mini" onclick="clearOutput()">삭제</button>
+                    </div>
                 </div>
                 <div id="output-screen" class="output-screen">
                     <div class="terminal-placeholder">실행 버튼을 누르면 분석이 시작됩니다...</div>
-                </div>
-                <div class="action-footer">
-                    <div class="page-control">
-                        <span class="control-label">Pages:</span>
-                        <input type="number" id="page-count-input" value="3" min="1" max="50">
-                    </div>
-                    <button class="btn-execute" onclick="executeAnalysis()">문서 작성</button>
-                    <button class="btn-save" onclick="saveAsDoc()">.DOC 저장</button>
-                </div>
-                <div class="page-count-hidden" style="display:none">
-                    <!-- 하위 호환성을 위해 ID 유지 -->
-                    <input type="hidden" id="page-count-val" value="10">
                 </div>
             </section>
         </main>
